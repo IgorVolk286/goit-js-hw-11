@@ -1,15 +1,30 @@
-export function fetchCData(data) {
-  const API_KEY = 'key=38330111-6d0efda7f4a8d995231e14698&';
-  const API_BASE_URL = `https://pixabay.com/api/`;
-  const endPoinds = `?${API_KEY}&q=${data}}&orientation=horizontal&safesearch=true`;
+// import axios from 'axios';
 
-  return fetch(`${API_BASE_URL}${endPoinds}`).then(resp => {
-    if (!resp.ok) {
-      throw new Error(resp.statusText);
-    }
-    return resp.json();
-  });
-}
+// export function fetchCData() {
+//   const API_KEY = 'key=38330111-6d0efda7f4a8d995231e14698&';
+//   const API_BASE_URL = `https://pixabay.com/api/`;
+//   const endPoinds = `?${API_KEY}&q=${data}}&orientation=horizontal&safesearch=true`;
+
+//   return fetch(`${API_BASE_URL}${endPoinds}`).then(resp => {
+//     if (!resp.ok) {
+//       throw new Error(resp.statusText);
+//     }
+//     return resp.json();
+//   });
+// }
+
+// export function fetchCData(data) {
+//   const API_KEY = 'key=38330111-6d0efda7f4a8d995231e14698&';
+//   const API_BASE_URL = `https://pixabay.com/api/`;
+//   const endPoinds = `?${API_KEY}&q=${data}}&orientation=horizontal&safesearch=true`;
+
+//   return fetch(`${API_BASE_URL}${endPoinds}`).then(resp => {
+//     if (!resp.ok) {
+//       throw new Error(resp.statusText);
+//     }
+//     return resp.json();
+//   });
+// }
 
 export function creatMarcUPGallery(arr) {
   return (refs.gallary.innerHTML = arr
