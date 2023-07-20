@@ -4,6 +4,8 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
 import { Report } from 'notiflix/build/notiflix-report-aio';
 
+const KEY = '38330111-6d0efda7f4a8d995231e14698';
+
 const refs = {
   form: document.querySelector('.search-form'),
   button: document.querySelector('.js-btn'),
@@ -18,7 +20,7 @@ function onBtnClick(event) {
   event.preventDefault();
   const { searchQuery } = event.currentTarget.elements;
   const data = searchQuery.value;
-  onbtnLoadMoreClick(countPage);
+
   fetchCData(data)
     .then(({ hits }) => {
       if (!hits.length) {
@@ -30,41 +32,64 @@ function onBtnClick(event) {
         );
       }
       creatMarcUPGallery(hits);
-
       let gallery = new SimpleLightbox('.gallery a', {
         captionDelay: 250,
       });
     })
-
     .catch(error =>
       Report.failure(
         'ERROR',
         '"Sorry, there are no images matching your search query. Please try again" <br/><br/>',
         'Try againe'
       )
-    );
+    )
+    .finally(() => refs.form.reset());
 }
-//
 
-let countPage = 0;
+let countPage = 1;
 
 function fetchCData(data) {
-  const API_KEY = 'key=38330111-6d0efda7f4a8d995231e14698&';
-  const API_BASE_URL = `https://pixabay.com/api/`;
-  const endPoinds = `?${API_KEY}&q=${data}}&orientation=horizontal&safesearch=true&page=${countPage}&per_page=40`;
+  return axios
+    .get(`https://pixabay.com/api/`, {
+      params: {
+        key: KEY,
+        q: `${data}`,
+        orientation: 'horizontal',
+        safesearch: 'true',
+        page: `${countPage}`,
+        per_page: '40',
+      },
+    })
+    .then(resp => {
+      if (!resp.status === 200) {
+        throw new Error(
+          Report.failure(
+            'ERROR',
+            '"Sorry, there are no images matching your search query. Please try again" <br/><br/>',
+            'Try againe'
+          )
+        );
+      }
+      return resp.data;
+    });
 
-  return fetch(`${API_BASE_URL}${endPoinds}`).then(resp => {
-    if (!resp.ok) {
-      throw new Error(
-        Report.failure(
-          'ERROR',
-          '"Sorry, there are no images matching your search query. Please try again" <br/><br/>',
-          'Try againe'
-        )
-      );
-    }
-    return resp.json();
-  });
+  // const API_KEY = 'key=38330111-6d0efda7f4a8d995231e14698&';
+  // const API_BASE_URL = `https://pixabay.com/api/`;
+  // const endPoinds = `?${API_KEY}&q=${data}}&orientation=horizontal&safesearch=true&page=${countPage}&per_page=40`;
+
+  // return fetch(`${API_BASE_URL}${endPoinds}`).then(resp => {
+  //   if (!resp.ok) {
+  //     throw new Error(
+  //       Report.failure(
+  //         'ERROR',
+  //         '"Sorry, there are no images matching your search query. Please try again" <br/><br/>',
+  //         'Try againe'
+  //       )
+  //     );
+  //   }
+
+  //   return resp.json();
+  // });
 }
 
 function creatMarcUPGallery(arr) {
@@ -90,12 +115,12 @@ function creatMarcUPGallery(arr) {
     </div>
   </div>`
       )
-      .join()
+      .join(' ')
   );
 }
 refs.btnLoadMore.addEventListener('click', onbtnLoadMoreClick);
 
-function onbtnLoadMoreClick() {
+function onbtnLoadMoreClick(event) {
   countPage += 1;
-  console.log(countPage);
+  console.log(event);
 }
