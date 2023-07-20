@@ -18,7 +18,7 @@ function onBtnClick(event) {
   event.preventDefault();
   const { searchQuery } = event.currentTarget.elements;
   const data = searchQuery.value;
-
+  onbtnLoadMoreClick(countPage);
   fetchCData(data)
     .then(({ hits }) => {
       if (!hits.length) {
@@ -29,7 +29,6 @@ function onBtnClick(event) {
             'Try again'
         );
       }
-
       creatMarcUPGallery(hits);
 
       let gallery = new SimpleLightbox('.gallery a', {
@@ -45,29 +44,9 @@ function onBtnClick(event) {
       )
     );
 }
-// export function fetchCData(data) {
-//   const API_KEY = 'key=38330111-6d0efda7f4a8d995231e14698&';
-//   axios.BASE_URL = `https://pixabay.com/api/?${API_KEY}`;
-//   // const endPoinds = `?${API_KEY}&q=${data}}&orientation=horizontal&safesearch=true`;
-//   // const config = {
-//   //   params:
-//   // };
+//
 
-//   return axios
-//     .get(`/user` {
-//       q: `${data}`,
-//       orientation: 'horizontal',
-//       safesearch: 'true',
-//     })
-//     .then(resp => {
-//       if (resp.status !== 200) {
-//         throw new Error(resp.statusText);
-//       }
-//       return resp.data;
-//     });
-// }
-
-let countPage = 1;
+let countPage = 0;
 
 function fetchCData(data) {
   const API_KEY = 'key=38330111-6d0efda7f4a8d995231e14698&';
@@ -90,9 +69,12 @@ function fetchCData(data) {
 
 function creatMarcUPGallery(arr) {
   refs.btnLoadMore.hidden = false;
-  return (refs.gallary.innerHTML = arr
-    .map(
-      el => `
+
+  return refs.gallary.insertAdjacentHTML(
+    'beforeend',
+    arr
+      .map(
+        el => `
   <div class="photo-card">
     <a href="${el.largeImageURL}"><img class= "img"src="${el.previewURL}" alt="${el.tags}" loading="lazy" /></a>
     <div class="info">
@@ -107,9 +89,13 @@ function creatMarcUPGallery(arr) {
         Downloads:<br>${el.downloads}</br></p>
     </div>
   </div>`
-    )
-    .join());
+      )
+      .join()
+  );
 }
 refs.btnLoadMore.addEventListener('click', onbtnLoadMoreClick);
 
-function onbtnLoadMoreClick() {}
+function onbtnLoadMoreClick() {
+  countPage += 1;
+  console.log(countPage);
+}
