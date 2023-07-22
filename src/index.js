@@ -34,12 +34,16 @@ function onBtnSearchClick(event) {
   fetchCData(dataqery)
     .then(({ totalHits, hits }) => {
       if (!hits.length) {
-        Notify.failure('Qui timide rogat docet negare');
+        refs.btnLoadMore.classList.add('js-hidden');
+        Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
         return;
       } else {
         Notify.success(`"Hooray! We found ${totalHits} images.`);
       }
       creatMarcUPGallery(hits);
+      refs.btnLoadMore.classList.remove('js-hidden');
     })
     .catch(error =>
       Report.failure(
@@ -67,8 +71,6 @@ async function fetchCData(dataqery, page = 1) {
 }
 
 function creatMarcUPGallery(arr) {
-  refs.btnLoadMore.classList.remove('js-hidden');
-
   let markUp = arr
     .map(
       ({
