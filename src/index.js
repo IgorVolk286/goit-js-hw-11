@@ -105,10 +105,19 @@ function onbtnLoadMoreClick(event) {
   totalHitsCount += 40;
   countPage += 1;
   console.log(totalHitsCount);
-
+  //
   fetchCData(dataqery, countPage)
     .then(({ totalHits, hits }) => {
       creatMarcUPGallery(hits);
+      const { height: cardHeight } = document
+        .querySelector('.gallery')
+        .firstElementChild.getBoundingClientRect();
+
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+      });
+
       if (totalHitsCount > totalHits) {
         Notify.info(
           ' "We are sorry, but you have reached the end of search results."'
