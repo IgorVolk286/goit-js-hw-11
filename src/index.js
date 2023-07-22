@@ -1,4 +1,3 @@
-// import { fetchCData } from './helpers';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
@@ -16,15 +15,18 @@ refs.btnLoadMore.hidden = true;
 
 refs.form.addEventListener('submit', onBtnClick);
 
+let dataqery = ' ';
+let countPage = 1;
+
 function onBtnClick(event) {
   event.preventDefault();
-  const { searchQuery } = event.currentTarget.elements;
-  const data = searchQuery.value;
 
-  fetchCData(data)
+  dataqery = event.currentTarget.elements.searchQuery.value;
+
+  fetchCData(dataqery)
     .then(({ hits }) => {
+      console.log(hits);
       if (!hits.length) {
-        console.log(hits.length);
         Report.failure(
           'Unsuccessfully',
           '"Sorry, there are no images matching your search query. Please try again" <br/><br/' >
@@ -32,9 +34,6 @@ function onBtnClick(event) {
         );
       }
       creatMarcUPGallery(hits);
-      let gallery = new SimpleLightbox('.gallery a', {
-        captionDelay: 250,
-      });
     })
     .catch(error =>
       Report.failure(
@@ -42,18 +41,15 @@ function onBtnClick(event) {
         '"Sorry, there are no images matching your search query. Please try again" <br/><br/>',
         'Try againe'
       )
-    )
-    .finally(() => refs.form.reset());
+    );
 }
 
-let countPage = 1;
-
-function fetchCData(data) {
+function fetchCData(dataqery, page = 1) {
   return axios
     .get(`https://pixabay.com/api/`, {
       params: {
         key: KEY,
-        q: `${data}`,
+        q: `${dataqery}`,
         orientation: 'horizontal',
         safesearch: 'true',
         page: `${countPage}`,
@@ -70,6 +66,7 @@ function fetchCData(data) {
           )
         );
       }
+      console.log(resp.data);
       return resp.data;
     });
 
@@ -91,19 +88,17 @@ function fetchCData(data) {
   //   return resp.json();
   // });
 }
-
+let gallery = new SimpleLightbox('.gallery a', {
+  captionDelay: 250,
+});
 function creatMarcUPGallery(arr) {
   refs.btnLoadMore.hidden = false;
-
-  return refs.gallary.insertAdjacentHTML(
-    'beforeend',
-    arr
-      .map(
-        el => `
-  <div class="photo-card">
+  let markUp = arr
+    .map(el => {
+      return `<div class="photo-card">
     <a href="${el.largeImageURL}"><img class= "img"src="${el.previewURL}" alt="${el.tags}" loading="lazy" /></a>
     <div class="info">
-      <p class="info-item">
+      <p class="info-item"> 
         Likes:<br>${el.likes}</br>
       </p>
       <p class="info-item">
@@ -113,14 +108,28 @@ function creatMarcUPGallery(arr) {
       <p class="info-item">
         Downloads:<br>${el.downloads}</br></p>
     </div>
-  </div>`
-      )
-      .join(' ')
-  );
+  </div>`;
+    })
+    .join(' ');
+
+  refs.gallary.insertAdjacentHTML('beforeend', markUp);
+  gallery.refresh();
 }
 refs.btnLoadMore.addEventListener('click', onbtnLoadMoreClick);
 
 function onbtnLoadMoreClick(event) {
-  countPage += 1;
   console.log(event);
+  countPage += 1;
+  fetchCData(dataqery, countPage)
+    .then(({ hits }) => {
+      creatMarcUPGallery(hits);
+    })
+
+    .catch(error =>
+      Report.failure(
+        'ERROR',
+        '"Sorry, there are no images matching your search query. Please try again" <br/><br/>',
+        'Try againe'
+      )
+    );
 }
