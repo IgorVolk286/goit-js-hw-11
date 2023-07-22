@@ -36,7 +36,7 @@ function onBtnSearchClick(event) {
       if (!hits.length) {
         refs.btnLoadMore.classList.add('js-hidden');
         Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
+          '"Sorry, there are no images matching your search query. Please try again."'
         );
         return;
       } else {
