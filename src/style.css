@@ -1,3 +1,7 @@
+body {
+  background-color: lavender;
+}
+
 .gallery {
   margin-left: 50px;
   margin-right: auto;
@@ -10,8 +14,13 @@
   display: flex;
   gap: 20px;
 }
+
 .photo-card {
   width: 320px;
+
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3),
+    -23px 0 20px -23px rgba(0, 0, 0, 0.6), 23px 0 20px -23px rgba(0, 0, 0, 0.6),
+    inset 0 0 40px rgba(0, 0, 0, 0.1);
 }
 .img {
   width: 320px;
@@ -35,4 +44,37 @@
   clip-path: inset(100%);
   clip: rect(0 0 0 0);
   overflow: hidden;
+}
+.input {
+  width: 400px;
+  height: 45px;
+  margin-right: 20px;
+  border-radius: 5px;
+  border: 2px solid black;
+}
+
+.search-form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+.load-more {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-weight: 600;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: blanchedalmond;
+}
+.js-btn {
+  font-weight: 600;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 4px;
+  background-color: blanchedalmond;
 }

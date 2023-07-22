@@ -3,6 +3,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
 import { Report } from 'notiflix/build/notiflix-report-aio';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 const KEY = '38330111-6d0efda7f4a8d995231e14698';
 
 const refs = {
@@ -82,7 +83,7 @@ function creatMarcUPGallery(arr) {
         return `<div class="photo-card">
     <a href="${largeImageURL}"><img class= "img"src="${previewURL}" alt="${tags}" loading="lazy" /></a>
     <div class="info">
-      <p class="info-item"> 
+      <p class="info-item">
         Likes:<br>${likes}</br>
       </p>
       <p class="info-item">
@@ -105,7 +106,7 @@ function onbtnLoadMoreClick(event) {
   totalHitsCount += 40;
   countPage += 1;
   console.log(totalHitsCount);
-  //
+
   fetchCData(dataqery, countPage)
     .then(({ totalHits, hits }) => {
       creatMarcUPGallery(hits);
