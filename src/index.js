@@ -39,12 +39,18 @@ function onBtnSearchClick(event) {
           '"Sorry, there are no images matching your search query. Please try again."'
         );
         return;
+      } else if (totalHits < 40) {
+        refs.btnLoadMore.classList.add('js-hidden');
+        Notify.info(
+          ' "We are sorry, but you have reached the end of search results."'
+        );
       } else {
+        refs.btnLoadMore.classList.remove('js-hidden');
         Notify.success(`"Hooray! We found ${totalHits} images.`);
       }
       creatMarcUPGallery(hits);
-      refs.btnLoadMore.classList.remove('js-hidden');
     })
+
     .catch(error =>
       Report.failure(
         'ERROR',
